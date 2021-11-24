@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "OktaOidc",
+        "repositoryURL": "https://github.com/okta/okta-oidc-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "af9f341d9c3769df0e14511d9564681e8b6b593d",
+          "version": "3.10.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

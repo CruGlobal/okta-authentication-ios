@@ -142,12 +142,12 @@ public class OktaAuthentication {
 extension OktaAuthentication {
     
     public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser, OktaAuthenticationError>) -> Void)) {
-        getAuthorizedUser { (_ result: Result<CruOktaUser, OktaAuthenticationError>) in
+        getAuthorizedCodableUser { (_ result: Result<CruOktaUser, OktaAuthenticationError>) in
             completion(result)
         }
     }
     
-    public func getAuthorizedUser<CodableUser: Codable>(completion: @escaping ((_ result: Result<CodableUser, OktaAuthenticationError>) -> Void)) {
+    public func getAuthorizedCodableUser<CodableUser: Codable>(completion: @escaping ((_ result: Result<CodableUser, OktaAuthenticationError>) -> Void)) {
         
         getAuthorizedUserJsonObject { (_ result: Result<[String: Any], OktaAuthenticationError>) in
             

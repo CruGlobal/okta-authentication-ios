@@ -141,13 +141,13 @@ public class OktaAuthentication {
 
 extension OktaAuthentication {
     
-    public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser?, OktaAuthenticationError>) -> Void)) {
-        getAuthorizedUser { (_ result: Result<CruOktaUser?, OktaAuthenticationError>) in
+    public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser, OktaAuthenticationError>) -> Void)) {
+        getAuthorizedUser { (_ result: Result<CruOktaUser, OktaAuthenticationError>) in
             completion(result)
         }
     }
     
-    public func getAuthorizedUser<CodableUser: Codable>(completion: @escaping ((_ result: Result<CodableUser?, OktaAuthenticationError>) -> Void)) {
+    public func getAuthorizedUser<CodableUser: Codable>(completion: @escaping ((_ result: Result<CodableUser, OktaAuthenticationError>) -> Void)) {
         
         getAuthorizedUserJsonObject { (_ result: Result<[String: Any], OktaAuthenticationError>) in
             
@@ -163,7 +163,7 @@ extension OktaAuthentication {
                 do {
                     
                     let userData: Data = try JSONSerialization.data(withJSONObject: userJsonObject, options: [])
-                    let codableUser: CodableUser? = try JSONDecoder().decode(CodableUser.self, from: userData)
+                    let codableUser: CodableUser = try JSONDecoder().decode(CodableUser.self, from: userData)
                     
                     completion(.success(codableUser))
                 }

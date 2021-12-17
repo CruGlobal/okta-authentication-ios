@@ -15,7 +15,7 @@ public protocol MinimumOktaConfigAttributes {
     var issuer: String { get }
     var redirectUri: String { get }
     var scopes: String { get }
-    var prompt: String? { get }
+    var prompt: String { get }
 }
 
 extension MinimumOktaConfigAttributes {

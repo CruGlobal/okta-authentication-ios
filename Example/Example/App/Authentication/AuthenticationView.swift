@@ -23,7 +23,8 @@ class AuthenticationView: UIViewController {
             logoutRedirectUri: "",
             issuer: "",
             redirectUri: "",
-            scopes: "openid profile offline_access email"
+            scopes: "openid profile offline_access email",
+            prompt: nil,
         ))
         
         super.init(nibName: String(describing: AuthenticationView.self), bundle: nil)

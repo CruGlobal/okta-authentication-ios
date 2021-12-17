@@ -15,7 +15,7 @@ public struct ProvidedOktaConfigModel: OktaConfigModelType, MinimumOktaConfigAtt
     public let issuer: String
     public let redirectUri: String
     public let scopes: String
-    public let prompt: String?
+    public let prompt: String
     
     public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String, scopes: String) {
         

@@ -23,7 +23,7 @@ public struct ProvidedOktaConfigModel: OktaConfigModelType, MinimumOktaConfigAtt
         self.logoutRedirectUri = logoutRedirectUri
         self.issuer = issuer
         self.redirectUri = redirectUri
-        self.scopes = scopes'
+        self.scopes = scopes
         self.prompt = prompt
     }
     

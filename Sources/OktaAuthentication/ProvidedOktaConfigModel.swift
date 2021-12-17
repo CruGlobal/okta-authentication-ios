@@ -27,7 +27,7 @@ public struct ProvidedOktaConfigModel: OktaConfigModelType, MinimumOktaConfigAtt
         self.prompt = "login"
     }
 
-    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String, scopes: String, prompt: String?) {
+    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String, scopes: String, prompt: String) {
         
         self.clientId = clientId
         self.logoutRedirectUri = logoutRedirectUri

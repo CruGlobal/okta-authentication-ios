@@ -15,14 +15,16 @@ public struct ProvidedOktaConfigModel: OktaConfigModelType, MinimumOktaConfigAtt
     public let issuer: String
     public let redirectUri: String
     public let scopes: String
+    public let prompt: String?
     
-    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String, scopes: String) {
+    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String, scopes: String, prompt: String?) {
         
         self.clientId = clientId
         self.logoutRedirectUri = logoutRedirectUri
         self.issuer = issuer
         self.redirectUri = redirectUri
         self.scopes = scopes
+        self.prompt = prompt
     }
     
     public func getEncodedData() -> [String : String] {

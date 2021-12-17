@@ -24,7 +24,7 @@ class AuthenticationView: UIViewController {
             issuer: "",
             redirectUri: "",
             scopes: "openid profile offline_access email",
-            prompt: nil,
+            prompt: "login",
         ))
         
         super.init(nibName: String(describing: AuthenticationView.self), bundle: nil)

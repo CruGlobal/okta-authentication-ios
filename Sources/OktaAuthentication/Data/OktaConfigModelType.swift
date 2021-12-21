@@ -1,5 +1,5 @@
 //
-//  MinimumOktaConfigAttributes.swift
+//  OktaConfigModelType.swift
 //  OktaAuthentication
 //
 //  Created by Levi Eggert on 11/24/21.
@@ -7,29 +7,35 @@
 //
 
 import Foundation
+import OktaOidc
 
-public protocol MinimumOktaConfigAttributes {
-    
+public protocol OktaConfigModelType {
+        
     var clientId: String { get }
     var logoutRedirectUri: String { get }
     var issuer: String { get }
+    var prompt: String? { get }
     var redirectUri: String { get }
     var scopes: String { get }
-    var prompt: String { get }
+    
+    func getEncodedData() -> [String: String]
 }
 
-extension MinimumOktaConfigAttributes {
+extension OktaConfigModelType {
     
-    func getMinimumOktaConfigEncodedData() -> [String: String] {
+    public func getEncodedData() -> [String: String] {
         
-        let data: [String: String] = [
+        var data: [String: String] = [
             "issuer": issuer,
             "clientId": clientId,
             "logoutRedirectUri": logoutRedirectUri,
             "redirectUri": redirectUri,
-            "scopes": scopes,
-            "prompt": prompt
+            "scopes": scopes
         ]
+        
+        if let prompt = prompt {
+            data["prompt"] = prompt
+        }
         
         return data
     }

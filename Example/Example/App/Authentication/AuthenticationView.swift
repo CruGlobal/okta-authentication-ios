@@ -18,14 +18,12 @@ class AuthenticationView: UIViewController {
         
         // TODO: Need to setup an Okta clientId for working with the example project. ~Levi
         
-        authentication = OktaAuthentication(configModel: ProvidedOktaConfigModel(
+        authentication = CruOktaAuthentication(
             clientId: "",
             logoutRedirectUri: "",
             issuer: "",
-            redirectUri: "",
-            scopes: "openid profile offline_access email",
-            prompt: "login",
-        ))
+            redirectUri: ""
+        )
         
         super.init(nibName: String(describing: AuthenticationView.self), bundle: nil)
     }

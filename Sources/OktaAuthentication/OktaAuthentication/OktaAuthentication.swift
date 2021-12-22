@@ -39,6 +39,18 @@ public class OktaAuthentication {
         return OktaAuthentication.sharedInMemoryAccessToken ?? OktaAuthentication.sharedStateManager?.accessToken
     }
     
+    public func renewAccessTokenElseAuthenticate(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>) -> Void)) {
+        
+        if refreshTokenExists {
+            
+            renewAccessToken(completion: completion)
+        }
+        else {
+            
+            authenticate(fromViewController: fromViewController, completion: completion)
+        }
+    }
+    
     public func authenticate(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>) -> Void)) {
         
         guard let oktaOidc = self.oktaOidc else {
@@ -96,56 +108,72 @@ public class OktaAuthentication {
         })
     }
     
-    public func signOut(fromViewController: UIViewController, completion: @escaping ((_ removeFromSecureStorageError: Error?, _ signOutError: OktaAuthenticationError?, _ revokeError: Error?) -> Void)) {
-        
-        var removeFromSecureStorageError: Error?
-        var signOutError: OktaAuthenticationError?
-        var revokeError: Error?
-        
+    public func signOut(fromViewController: UIViewController, forceRemoveSecureStorageAndRevokeStateManager: Bool = false, completion: @escaping ((_ signOutError: OktaAuthenticationError?, _ removeFromSecureStorageError: Error?, _ revokeError: Error?) -> Void)) {
+                
         guard let oktaOidc = self.oktaOidc, let sharedStateManager = OktaAuthentication.sharedStateManager else {
-            signOutError = .internalError(error: nil, message: "Okta signOut failed, found null OktaOidcStateManager.")
-            completion(removeFromSecureStorageError, signOutError, revokeError)
+            completion(.internalError(error: nil, message: "Okta signOut failed, found null OktaOidcStateManager."), nil, nil)
             return
         }
                 
-        oktaOidc.signOutOfOkta(sharedStateManager, from: fromViewController) { (error: Error?) in
+        oktaOidc.signOutOfOkta(sharedStateManager, from: fromViewController) { [weak self] (error: Error?) in
             
             if let error = error {
                 
-                signOutError = .oktaSdkError(error: error)
-                completion(removeFromSecureStorageError, signOutError, revokeError)
+                if forceRemoveSecureStorageAndRevokeStateManager {
+                    
+                    self?.removeSecureStorageAndRevokeStateManager { (removeFromSecureStorageError: Error?, revokeError: Error?) in
+                        
+                        completion(nil, removeFromSecureStorageError, revokeError)
+                    }
+                }
+                else {
+                    
+                    completion(.oktaSdkError(error: error), nil, nil)
+                }
             }
             else {
                 
-                OktaAuthentication.sharedStateManager = nil
-                OktaAuthentication.sharedInMemoryAccessToken = nil
-                
-                do {
-                    try sharedStateManager.removeFromSecureStorage()
-                }
-                catch let error {
-                    removeFromSecureStorageError = error
-                }
-                
-                sharedStateManager.revoke(sharedStateManager.refreshToken) { (response: Bool, error: Error?) in
+                self?.removeSecureStorageAndRevokeStateManager { (removeFromSecureStorageError: Error?, revokeError: Error?) in
                     
-                    revokeError = error
-                    completion(removeFromSecureStorageError, signOutError, revokeError)
+                    completion(nil, removeFromSecureStorageError, revokeError)
                 }
             }
         }
+    }
+    
+    public func removeSecureStorageAndRevokeStateManager(completion: @escaping ((_ removeFromSecureStorageError: Error?, _ revokeError: Error?) -> Void)) {
+        
+        guard let sharedStateManager = OktaAuthentication.sharedStateManager else {
+            let error: OktaAuthenticationError = .internalError(error: nil, message: "Okta removeSecureStorage failed, found null OktaOidcStateManager.")
+            completion(error, nil)
+            return
+        }
+        
+        var removeFromSecureStorageError: Error?
+        var revokeError: Error?
+        
+        OktaAuthentication.sharedStateManager = nil
+        OktaAuthentication.sharedInMemoryAccessToken = nil
+        
+        do {
+            try sharedStateManager.removeFromSecureStorage()
+        }
+        catch let error {
+            removeFromSecureStorageError = error
+        }
+        
+        sharedStateManager.revoke(sharedStateManager.refreshToken) { (response: Bool, error: Error?) in
+            
+            revokeError = error
+            completion(removeFromSecureStorageError, revokeError)
+        }
+
     }
 }
 
 // MARK: - Authorized User
 
 extension OktaAuthentication {
-    
-    public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser, OktaAuthenticationError>) -> Void)) {
-        getAuthorizedCodableUser { (_ result: Result<CruOktaUser, OktaAuthenticationError>) in
-            completion(result)
-        }
-    }
     
     public func getAuthorizedCodableUser<CodableUser: Codable>(completion: @escaping ((_ result: Result<CodableUser, OktaAuthenticationError>) -> Void)) {
         

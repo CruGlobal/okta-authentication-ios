@@ -29,7 +29,7 @@ public class CruOktaAuthentication: OktaAuthentication {
         fatalError("init(configModel:) is not supported.")
     }
     
-    public func signIn(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>) -> Void)) {
+    public func signIn(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>, _ authMethodType: OktaAuthMethodType) -> Void)) {
         
         super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
     }

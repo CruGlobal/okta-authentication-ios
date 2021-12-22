@@ -16,4 +16,14 @@ public struct OktaConfigModel: OktaConfigModelType {
     public let prompt: String?
     public let redirectUri: String
     public let scopes: String
+    
+    public init(clientId: String, logoutRedirectUri: String, issuer: String, prompt: String?, redirectUri: String, scopes: String) {
+        
+        self.clientId = clientId
+        self.logoutRedirectUri = logoutRedirectUri
+        self.issuer = issuer
+        self.prompt = prompt
+        self.redirectUri = redirectUri
+        self.scopes = scopes
+    }
 }

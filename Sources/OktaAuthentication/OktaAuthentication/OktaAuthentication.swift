@@ -39,15 +39,19 @@ public class OktaAuthentication {
         return OktaAuthentication.sharedInMemoryAccessToken ?? OktaAuthentication.sharedStateManager?.accessToken
     }
     
-    public func renewAccessTokenElseAuthenticate(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>) -> Void)) {
+    public func renewAccessTokenElseAuthenticate(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>, _ authMethodType: OktaAuthMethodType) -> Void)) {
         
         if refreshTokenExists {
             
-            renewAccessToken(completion: completion)
+            renewAccessToken { result in
+                completion(result, .renewedAccessToken)
+            }
         }
         else {
             
-            authenticate(fromViewController: fromViewController, completion: completion)
+            authenticate(fromViewController: fromViewController) { result in
+                completion(result, .newAuthorization)
+            }
         }
     }
     

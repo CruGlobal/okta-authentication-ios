@@ -1,10 +1,6 @@
-    import XCTest
-    @testable import OktaAuthentication
+import XCTest
+@testable import OktaAuthentication
 
-    final class OktaAuthenticationTests: XCTestCase {
-        func testExample() {
-            // This is an example of a functional test case.
-            // Use XCTAssert and related functions to verify your tests produce the correct
-            // results.
-        }
-    }
+final class OktaAuthenticationTests: XCTestCase {
+
+}

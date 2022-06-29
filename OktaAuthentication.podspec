@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'OktaAuthentication'
-    s.version          = '1.2.1'
+    s.version          = '1.2.2'
     s.summary          = 'Operates on OktaOidc and contains shared logic for Cru apps to authenticate with Okta.'
   
   
@@ -19,6 +19,6 @@ Pod::Spec.new do |s|
   
     s.source_files = 'Sources/**/*.{swift}'
 
-    s.dependency 'OktaOidc', '~> 3.10.3'    
+    s.dependency 'OktaOidc', '~> 3.11.2'    
   end
   

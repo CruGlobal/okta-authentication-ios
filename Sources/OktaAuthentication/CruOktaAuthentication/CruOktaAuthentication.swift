@@ -31,6 +31,36 @@ public class CruOktaAuthentication: OktaAuthentication {
     
     public func signIn(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>, _ authMethodType: OktaAuthMethodType) -> Void)) {
         
+        var numberOfSignInRetries: Int = 0
+        
+        super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { [weak self] (result: Result<OktaAccessToken, OktaAuthenticationError>, authMethodType: OktaAuthMethodType) in
+            
+            switch result {
+           
+            case .success( _):
+                break
+            
+            case .failure( _):
+                
+                let shouldSignOutAndAttemptNewSignIn: Bool = authMethodType == .renewedAccessToken && numberOfSignInRetries < 1
+                
+                guard !shouldSignOutAndAttemptNewSignIn else {
+                    
+                    numberOfSignInRetries += 1
+                    
+                    self?.removeSecureStorageAndRevokeStateManager(completion: { [weak self] (removeFromSecureStorageError: Error?, revokeError: Error?) in
+                        
+                        self?.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
+                    })
+                    
+                    return
+                }
+            }
+            
+            
+            completion(result, authMethodType)
+        }
+        
         super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
     }
     

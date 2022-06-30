@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'OktaAuthentication'
-    s.version          = '1.2.2'
+    s.version          = '1.2.3'
     s.summary          = 'Operates on OktaOidc and contains shared logic for Cru apps to authenticate with Okta.'
   
   

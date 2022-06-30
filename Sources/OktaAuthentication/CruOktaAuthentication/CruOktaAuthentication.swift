@@ -59,9 +59,7 @@ public class CruOktaAuthentication: OktaAuthentication {
             
             
             completion(result, authMethodType)
-        }
-        
-        super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
+        }        
     }
     
     public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutError: OktaAuthenticationError?, _ removeFromSecureStorageError: Error?, _ revokeError: Error?) -> Void)) {

@@ -29,26 +29,26 @@ public class CruOktaAuthentication: OktaAuthentication {
         fatalError("init(configModel:) is not supported.")
     }
     
-    public func signIn(fromViewController: UIViewController, completion: @escaping ((_ result: Result<OktaAccessToken, OktaAuthenticationError>, _ authMethodType: OktaAuthMethodType) -> Void)) {
+    public func signIn(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
         
         var numberOfSignInRetries: Int = 0
         
-        super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { [weak self] (result: Result<OktaAccessToken, OktaAuthenticationError>, authMethodType: OktaAuthMethodType) in
+        super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { [weak self] (response: OktaAuthenticationResponse) in
             
-            switch result {
+            switch response.result {
            
             case .success( _):
                 break
             
             case .failure( _):
                 
-                let shouldSignOutAndAttemptNewSignIn: Bool = authMethodType == .renewedAccessToken && numberOfSignInRetries < 1
+                let shouldSignOutAndAttemptNewSignIn: Bool = response.authMethod == .renewedAccessToken && numberOfSignInRetries < 1
                 
                 guard !shouldSignOutAndAttemptNewSignIn else {
                     
                     numberOfSignInRetries += 1
                     
-                    self?.removeSecureStorageAndRevokeStateManager(completion: { [weak self] (removeFromSecureStorageError: Error?, revokeError: Error?) in
+                    self?.removeSecureStorageAndRevokeStateManager(completion: { [weak self] (revokeResponse: OktaRevokeResponse) in
                         
                         self?.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
                     })
@@ -57,12 +57,11 @@ public class CruOktaAuthentication: OktaAuthentication {
                 }
             }
             
-            
-            completion(result, authMethodType)
+            completion(response)
         }        
     }
     
-    public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutError: OktaAuthenticationError?, _ removeFromSecureStorageError: Error?, _ revokeError: Error?) -> Void)) {
+    public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutResponse: OktaSignOutResponse) -> Void)) {
         
         super.signOut(fromViewController: fromViewController, forceRemoveSecureStorageAndRevokeStateManager: true, completion: completion)
     }

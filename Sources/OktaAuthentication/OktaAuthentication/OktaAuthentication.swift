@@ -36,15 +36,57 @@ public class OktaAuthentication {
 
 extension OktaAuthentication {
     
-    public var refreshTokenExists: Bool {
-        return OktaAuthentication.sharedStateManager?.refreshToken != nil
+    public func authenticate(fromViewController: UIViewController, policy: OktaAuthenticationPolicy, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
+        
+        switch policy {
+            
+        case .attemptToRenewAccessTokenElseSignInWithBrowser(let shouldSignOutAndRetryAuthenticationIfAuthenticationFails):
+            
+            if shouldSignOutAndRetryAuthenticationIfAuthenticationFails {
+                renewAccessTokenElseAuthenticateWithSignOutAndRetryOnAuthenticationFailure(fromViewController: fromViewController, completion: completion)
+            }
+            else {
+                renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
+            }
+            
+        case .signInWithBrowser:
+            authenticate(fromViewController: fromViewController, completion: completion)
+        }
     }
     
-    public func getAccessTokenFromPersistentStore() -> String? {
-        return OktaAuthentication.sharedInMemoryAccessToken ?? OktaAuthentication.sharedStateManager?.accessToken
+    private func renewAccessTokenElseAuthenticateWithSignOutAndRetryOnAuthenticationFailure(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
+        
+        var numberOfSignInRetries: Int = 0
+        
+        renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { [weak self] (response: OktaAuthenticationResponse) in
+            
+            switch response.result {
+           
+            case .success( _):
+                break
+            
+            case .failure( _):
+                
+                let shouldSignOutAndAttemptNewSignIn: Bool = response.authMethod == .renewedAccessToken && numberOfSignInRetries < 1
+                
+                guard !shouldSignOutAndAttemptNewSignIn else {
+                    
+                    numberOfSignInRetries += 1
+                    
+                    self?.removeSecureStorageAndRevokeStateManager(completion: { [weak self] (revokeResponse: OktaRevokeResponse) in
+                        
+                        self?.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
+                    })
+                    
+                    return
+                }
+            }
+            
+            completion(response)
+        }
     }
     
-    public func renewAccessTokenElseAuthenticate(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
+    private func renewAccessTokenElseAuthenticate(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
         
         if refreshTokenExists {
             renewAccessToken(completion: completion)
@@ -54,7 +96,7 @@ extension OktaAuthentication {
         }
     }
     
-    public func authenticate(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
+    private func authenticate(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
         
         let authMethod: OktaAuthMethodType = .newAuthorization
         
@@ -99,6 +141,19 @@ extension OktaAuthentication {
             
             completion(response)
         })
+    }
+}
+
+// MARK: - Access Token
+
+extension OktaAuthentication {
+    
+    public var refreshTokenExists: Bool {
+        return OktaAuthentication.sharedStateManager?.refreshToken != nil
+    }
+    
+    public func getAccessTokenFromPersistentStore() -> String? {
+        return OktaAuthentication.sharedInMemoryAccessToken ?? OktaAuthentication.sharedStateManager?.accessToken
     }
     
     public func renewAccessToken(completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {

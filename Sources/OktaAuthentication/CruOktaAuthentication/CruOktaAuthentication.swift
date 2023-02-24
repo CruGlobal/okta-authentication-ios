@@ -13,7 +13,7 @@ public class CruOktaAuthentication: OktaAuthentication {
     private static let defaultScopes: String = "openid profile offline_access email"
     private static let defaultPrompt: String = "login"
     
-    public required init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String) {
+    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String) {
         
         super.init(configModel: OktaConfigModel(
             clientId: clientId,
@@ -23,10 +23,6 @@ public class CruOktaAuthentication: OktaAuthentication {
             redirectUri: redirectUri,
             scopes: CruOktaAuthentication.defaultScopes)
         )
-    }
-    
-    public required init(configModel: OktaConfigModelType) {
-        fatalError("init(configModel:) is not supported.")
     }
     
     public func signIn(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {

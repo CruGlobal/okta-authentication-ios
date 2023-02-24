@@ -16,7 +16,7 @@ public class OktaAuthentication {
     
     private let oktaOidc: OktaOidc?
             
-    public required init(configModel: OktaConfigModelType) {
+    public init(configModel: OktaConfigModelType) {
         
         let configData: [String: String] = configModel.getEncodedData()
         

@@ -11,23 +11,11 @@ import Combine
 
 extension OktaAuthentication {
     
-    public func renewAccessTokenElseAuthenticatePublisher(fromViewController: UIViewController) -> AnyPublisher<OktaAuthenticationResponse, Never> {
+    public func authenticatePublisher(fromViewController: UIViewController, policy: OktaAuthenticationPolicy) -> AnyPublisher<OktaAuthenticationResponse, Never> {
         
         return Future() { promise in
                 
-            self.renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { (response: OktaAuthenticationResponse) in
-                
-                promise(.success(response))
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    public func authenticatePublisher(fromViewController: UIViewController) -> AnyPublisher<OktaAuthenticationResponse, Never> {
-        
-        return Future() { promise in
-                
-            self.authenticate(fromViewController: fromViewController) { (response: OktaAuthenticationResponse) in
+            self.authenticate(fromViewController: fromViewController, policy: policy) { (response: OktaAuthenticationResponse) in
                 
                 promise(.success(response))
             }

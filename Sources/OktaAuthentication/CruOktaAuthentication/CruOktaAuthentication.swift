@@ -13,7 +13,7 @@ public class CruOktaAuthentication: OktaAuthentication {
     private static let defaultScopes: String = "openid profile offline_access email"
     private static let defaultPrompt: String = "login"
     
-    public required init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String) {
+    public init(clientId: String, logoutRedirectUri: String, issuer: String, redirectUri: String) {
         
         super.init(configModel: OktaConfigModel(
             clientId: clientId,
@@ -25,40 +25,9 @@ public class CruOktaAuthentication: OktaAuthentication {
         )
     }
     
-    public required init(configModel: OktaConfigModelType) {
-        fatalError("init(configModel:) is not supported.")
-    }
-    
     public func signIn(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
         
-        var numberOfSignInRetries: Int = 0
-        
-        super.renewAccessTokenElseAuthenticate(fromViewController: fromViewController) { [weak self] (response: OktaAuthenticationResponse) in
-            
-            switch response.result {
-           
-            case .success( _):
-                break
-            
-            case .failure( _):
-                
-                let shouldSignOutAndAttemptNewSignIn: Bool = response.authMethod == .renewedAccessToken && numberOfSignInRetries < 1
-                
-                guard !shouldSignOutAndAttemptNewSignIn else {
-                    
-                    numberOfSignInRetries += 1
-                    
-                    self?.removeSecureStorageAndRevokeStateManager(completion: { [weak self] (revokeResponse: OktaRevokeResponse) in
-                        
-                        self?.renewAccessTokenElseAuthenticate(fromViewController: fromViewController, completion: completion)
-                    })
-                    
-                    return
-                }
-            }
-            
-            completion(response)
-        }        
+        super.authenticate(fromViewController: fromViewController, policy: .attemptToRenewAccessTokenElseSignInWithBrowser(shouldSignOutAndRetryAuthenticationIfAuthenticationFails: true), completion: completion)
     }
     
     public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutResponse: OktaSignOutResponse) -> Void)) {

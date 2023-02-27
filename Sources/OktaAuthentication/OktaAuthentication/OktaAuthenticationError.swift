@@ -13,6 +13,23 @@ public enum OktaAuthenticationError: Error {
     case internalError(error: Error?, message: String)
     case oktaSdkError(error: Error)
     
+    public func getError() -> Error {
+        
+        switch self {
+       
+        case .internalError(let error, let message):
+            
+            guard let error = error else {
+                return NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Internal OktaAuthenticationError with message: \(message)"])
+            }
+            
+            return error
+            
+        case .oktaSdkError(let error):
+            return error
+        }
+    }
+    
     public var errorCode: Int {
         switch self {
         case .internalError(let error, _):

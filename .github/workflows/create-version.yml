@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Set Version Output
         id: version
-        run: grep s\\.version\\s OktaAuthentication.podspec | sed 's/s.//' | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
+        run: grep s\\.version\\s VERSION | sed 's/s.//' | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
 
   print_current_version:
     name: Print Current Version

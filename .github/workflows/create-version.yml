@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Set Version Output
         id: version
-        run: grep s\\.version\\s VERSION | sed 's/s.//' | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
+        run: grep version VERSION | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
 
   print_current_version:
     name: Print Current Version
@@ -162,7 +162,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Set Podspec Version to New Version
         run: |
-          sed -i "s/.version = '${{ needs.current_version.outputs.version }}'/.version = '${{ needs.new_version.outputs.version }}'/g" VERSION
+          sed -i "s/version = '${{ needs.current_version.outputs.version }}'/version = '${{ needs.new_version.outputs.version }}'/g" VERSION
       - name: Create Version Branch and PR
         uses: peter-evans/create-pull-request@v6
         with:

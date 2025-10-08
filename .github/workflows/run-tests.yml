@@ -22,7 +22,7 @@ jobs:
         with:
           xcode-version: '26.0.0'
       - name: Run Tests
-        run: xcodebuild test -scheme OktaAuthentication -sdk iphonesimulator17.5 -destination "OS=17.5,name=iPhone 15"
+        run: xcodebuild test -scheme OktaAuthentication -destination "OS=26.0,name=iPhone 17"
       - name: Upload Xcode Code Coverage Report to CodeCov
         uses: codecov/codecov-action@v4
         with:

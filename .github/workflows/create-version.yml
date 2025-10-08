@@ -160,7 +160,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set Podspec Version to New Version
+      - name: Set New Version Number
         run: |
           sed -i "s/version = '${{ needs.current_version.outputs.version }}'/version = '${{ needs.new_version.outputs.version }}'/g" VERSION
       - name: Create Version Branch and PR

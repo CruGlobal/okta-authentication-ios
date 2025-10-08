@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "OktaOidc",
-        "repositoryURL": "https://github.com/okta/okta-oidc-ios.git",
-        "state": {
-          "branch": null,
-          "revision": "91eac722b8e859ba7f15d65a9085a64a296bc065",
-          "version": "3.11.2"
-        }
+  "pins" : [
+    {
+      "identity" : "okta-oidc-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/okta/okta-oidc-ios.git",
+      "state" : {
+        "revision" : "ff0b914c25f0638a08c837d433841d4fa22a79cc",
+        "version" : "3.11.7"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }

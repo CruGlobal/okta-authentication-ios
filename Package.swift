@@ -13,7 +13,7 @@ let package = Package(
             targets: ["OktaAuthentication"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/okta/okta-oidc-ios.git", .upToNextMinor(from: "3.11.5"))
+        .package(url: "https://github.com/okta/okta-oidc-ios.git", .upToNextMinor(from: "3.11.7"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

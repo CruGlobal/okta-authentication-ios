@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum OktaAuthMethodType {
+public enum OktaAuthMethodType: Sendable {
     
     case newAuthorization
     case renewedAccessToken

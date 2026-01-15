@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CruOktaUser: Codable {
+public struct CruOktaUser: Codable, Sendable {
     
     public let email: String
     public let grMasterPersonId: String

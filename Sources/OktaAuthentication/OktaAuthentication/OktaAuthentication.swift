@@ -9,14 +9,14 @@
 import UIKit
 import OktaOidc
 
-public class OktaAuthentication {
+@MainActor public class OktaAuthentication {
     
     private static var sharedStateManager: OktaOidcStateManager?
     private static var sharedInMemoryAccessToken: String?
     
     private let oktaOidc: OktaOidc?
             
-    public init(configModel: OktaConfigModelType) {
+    public init(configModel: OktaConfigModelInterface) {
         
         let configData: [String: String] = configModel.getEncodedData()
         

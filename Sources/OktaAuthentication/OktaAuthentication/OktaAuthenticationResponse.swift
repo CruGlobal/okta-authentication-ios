@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OktaAuthenticationResponse {
+public struct OktaAuthenticationResponse: Sendable {
     
     public let result: Result<OktaAccessToken, OktaAuthenticationError>
     public let authMethod: OktaAuthMethodType

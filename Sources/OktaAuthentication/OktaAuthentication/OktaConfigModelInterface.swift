@@ -1,5 +1,5 @@
 //
-//  OktaConfigModelType.swift
+//  OktaConfigModelInterface.swift
 //  OktaAuthentication
 //
 //  Created by Levi Eggert on 11/24/21.
@@ -9,7 +9,7 @@
 import Foundation
 import OktaOidc
 
-public protocol OktaConfigModelType {
+public protocol OktaConfigModelInterface: Sendable {
         
     var clientId: String { get }
     var logoutRedirectUri: String { get }
@@ -21,7 +21,7 @@ public protocol OktaConfigModelType {
     func getEncodedData() -> [String: String]
 }
 
-extension OktaConfigModelType {
+extension OktaConfigModelInterface {
     
     public func getEncodedData() -> [String: String] {
         

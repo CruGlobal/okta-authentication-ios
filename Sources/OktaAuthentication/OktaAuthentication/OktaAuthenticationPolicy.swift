@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum OktaAuthenticationPolicy {
+public enum OktaAuthenticationPolicy: Sendable {
     
     case attemptToRenewAccessTokenElseSignInWithBrowser(shouldSignOutAndRetryAuthenticationIfAuthenticationFails: Bool)
     case signInWithBrowser

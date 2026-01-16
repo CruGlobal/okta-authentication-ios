@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OktaAccessToken {
+public struct OktaAccessToken: Sendable {
     
     public let value: String
 }

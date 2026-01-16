@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OktaRevokeResponse {
+public struct OktaRevokeResponse: Sendable {
     
     public let removeFromSecureStorageError: Error?
     public let revokeError: Error?

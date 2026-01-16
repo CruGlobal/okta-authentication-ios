@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OktaConfigModel: OktaConfigModelType {
+public struct OktaConfigModel: OktaConfigModelInterface {
     
     public let clientId: String
     public let logoutRedirectUri: String

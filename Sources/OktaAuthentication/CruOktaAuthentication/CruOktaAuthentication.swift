@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CruOktaAuthentication: OktaAuthentication {
+public final class CruOktaAuthentication: OktaAuthentication {
     
     private static let defaultScopes: String = "openid profile offline_access email"
     private static let defaultPrompt: String = "login"
@@ -25,17 +25,17 @@ public class CruOktaAuthentication: OktaAuthentication {
         )
     }
     
-    public func signIn(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
+    @MainActor public func signIn(fromViewController: UIViewController, completion: @escaping ((_ response: OktaAuthenticationResponse) -> Void)) {
         
         super.authenticate(fromViewController: fromViewController, policy: .attemptToRenewAccessTokenElseSignInWithBrowser(shouldSignOutAndRetryAuthenticationIfAuthenticationFails: true), completion: completion)
     }
     
-    public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutResponse: OktaSignOutResponse) -> Void)) {
+    @MainActor public func signOut(fromViewController: UIViewController, completion: @escaping ((_ signOutResponse: OktaSignOutResponse) -> Void)) {
         
         super.signOut(fromViewController: fromViewController, forceRemoveSecureStorageAndRevokeStateManager: true, completion: completion)
     }
     
-    public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser, OktaAuthenticationError>) -> Void)) {
+    @MainActor public func getAuthorizedCruUser(completion: @escaping ((_ result: Result<CruOktaUser, OktaAuthenticationError>) -> Void)) {
         getAuthorizedCodableUser { (_ result: Result<CruOktaUser, OktaAuthenticationError>) in
             completion(result)
         }

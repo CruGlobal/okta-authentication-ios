@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OktaSignOutResponse {
+public struct OktaSignOutResponse: Sendable {
     
     public let signOutError: OktaAuthenticationError?
     public let revokeResponse: OktaRevokeResponse?

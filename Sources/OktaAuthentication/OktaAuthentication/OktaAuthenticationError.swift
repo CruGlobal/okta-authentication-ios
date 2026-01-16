@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum OktaAuthenticationError: Error {
+public enum OktaAuthenticationError: Error, Sendable {
     
     case internalError(error: Error?, message: String)
     case oktaSdkError(error: Error)
